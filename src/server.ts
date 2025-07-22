@@ -20,7 +20,4 @@ app.get("/health", (_, res) => {
   res.send("OK");
 });
 
-app.listen({ port: env.PORT }).then(() => {
-  // biome-ignore lint/suspicious/noConsole: Only for debugging
-  console.log("HTTP server running!");
-});
+app.listen({ port: env.PORT });
