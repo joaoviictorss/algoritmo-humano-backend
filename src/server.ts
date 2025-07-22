@@ -1,0 +1,26 @@
+import fastifyCors from "@fastify/cors";
+import fastify from "fastify";
+import {
+  serializerCompiler,
+  validatorCompiler,
+  type ZodTypeProvider,
+} from "fastify-type-provider-zod";
+import { env } from "./env.ts";
+
+const app = fastify().withTypeProvider<ZodTypeProvider>();
+
+app.register(fastifyCors, {
+  origin: "http://localhost:5173",
+});
+
+app.setSerializerCompiler(serializerCompiler);
+app.setValidatorCompiler(validatorCompiler);
+
+app.get("/health", (_, res) => {
+  res.send("OK");
+});
+
+app.listen({ port: env.PORT }).then(() => {
+  // biome-ignore lint/suspicious/noConsole: Only for debugging
+  console.log("HTTP server running!");
+});
