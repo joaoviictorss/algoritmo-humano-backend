@@ -1,4 +1,5 @@
 import fastifyCors from "@fastify/cors";
+import fastifyJwt from "@fastify/jwt";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
 import fastify from "fastify";
@@ -10,8 +11,11 @@ import {
 } from "fastify-type-provider-zod";
 
 import { env } from "@/env";
-
-import { createAccount } from "@/routes/auth";
+import {
+  authenticateWithPassword,
+  createAccount,
+  getProfile,
+} from "@/routes/auth";
 
 import { errorHandler } from "./error-handler";
 
@@ -32,6 +36,15 @@ app.register(fastifySwagger, {
         "Uma plataforma para criadores de conteúdo e consultores possam vender seus cursos e treinamentos dentro de suas comunidades.",
       version: "1.0.0",
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
   },
   transform: jsonSchemaTransform,
 });
@@ -40,7 +53,13 @@ app.register(fastifySwaggerUi, {
   routePrefix: "/docs",
 });
 
+app.register(fastifyJwt, {
+  secret: env.JWT_SECRET,
+});
+
 app.register(createAccount);
+app.register(authenticateWithPassword);
+app.register(getProfile);
 
 app.get("/health", (_, res) => {
   res.send("OK");
