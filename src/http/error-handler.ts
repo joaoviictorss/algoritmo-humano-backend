@@ -43,7 +43,7 @@ export const errorHandler: FastifyErrorHandler = (error, _, reply) => {
   // biome-ignore lint/suspicious/noConsole: Only for debugging
   console.error(error);
 
-  // todo: send error to some observability platform
+  // todo: send error to observability platform (sentry)
 
   return reply.status(500).send({
     error: "Internal Server Error",
