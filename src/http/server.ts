@@ -5,16 +5,22 @@ import {
   validatorCompiler,
   type ZodTypeProvider,
 } from "fastify-type-provider-zod";
-import { env } from "./env.ts";
+import { env } from "@/env";
+import { createAccount } from "@/routes/auth";
+import { errorHandler } from "./error-handler";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
 app.register(fastifyCors, {
-  origin: "http://localhost:5173",
+  origin: env.FRONTEND_URL,
 });
+
+app.setErrorHandler(errorHandler);
 
 app.setSerializerCompiler(serializerCompiler);
 app.setValidatorCompiler(validatorCompiler);
+
+app.register(createAccount);
 
 app.get("/health", (_, res) => {
   res.send("OK");
