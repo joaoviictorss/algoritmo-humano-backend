@@ -4,7 +4,7 @@ import { z } from "zod";
 
 import { auth } from "@/http/middlewares/auth";
 import { BadRequestError } from "@/http/routes/_errors/bad-request-error";
-import { prisma } from "@/lib/prisma";
+import { findUserById } from "@/utils";
 
 export const getProfile = (app: FastifyInstance) => {
   app
@@ -32,17 +32,7 @@ export const getProfile = (app: FastifyInstance) => {
       async (request, reply) => {
         const userId = await request.getCurrentUserId();
 
-        const user = await prisma.user.findUnique({
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            avatarUrl: true,
-          },
-          where: {
-            id: userId,
-          },
-        });
+        const user = await findUserById(userId);
 
         if (!user) {
           throw new BadRequestError("User not found.");

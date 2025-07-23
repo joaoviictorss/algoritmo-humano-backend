@@ -2,7 +2,7 @@ import { compare } from "bcryptjs";
 import type { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
-import { findUserByEmail } from "@/utils/user/find-user-by-email";
+import { findUserByEmail } from "@/utils";
 import { BadRequestError } from "../_errors/bad-request-error";
 
 export const authenticateWithPassword = (app: FastifyInstance) => {

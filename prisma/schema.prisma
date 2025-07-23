@@ -31,9 +31,10 @@ model User {
 model Course {
   id          String       @id @default(uuid())
   title       String
+  slug        String       @unique
   description String
-  imageUrl    String       @map("image_url")
-  duration    String
+  imageUrl    String?      @map("image_url")
+  duration    Int
   status      CourseStatus
   createdAt   DateTime     @default(now()) @map("created_at")
   updatedAt   DateTime     @updatedAt @map("updated_at")

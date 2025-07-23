@@ -17,6 +17,14 @@ import {
   getProfile,
 } from "@/routes/auth";
 
+import {
+  createCourse,
+  deleteCourseBySlug,
+  getAllCourses,
+  getMyCourses,
+  updateCourseBySlug,
+} from "@/routes/courses";
+
 import { errorHandler } from "./error-handler";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
@@ -57,9 +65,17 @@ app.register(fastifyJwt, {
   secret: env.JWT_SECRET,
 });
 
+// Auth
 app.register(createAccount);
 app.register(authenticateWithPassword);
 app.register(getProfile);
+
+// Courses
+app.register(getAllCourses);
+app.register(getMyCourses);
+app.register(createCourse);
+app.register(updateCourseBySlug);
+app.register(deleteCourseBySlug);
 
 app.get("/health", (_, res) => {
   res.send("OK");
