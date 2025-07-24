@@ -31,6 +31,7 @@ export const createCourse = (app: FastifyInstance) => {
           response: {
             201: z.object({
               message: z.string(),
+              displayMessage: z.string(),
             }),
           },
         },
@@ -54,6 +55,7 @@ export const createCourse = (app: FastifyInstance) => {
 
         return reply.status(201).send({
           message: "Course created successfully.",
+          displayMessage: "Curso criado com sucesso.",
         });
       }
     );

@@ -13,7 +13,7 @@ export const authenticateWithPassword = (app: FastifyInstance) => {
         tags: ["Auth"],
         summary: "Authenticate with email & password",
         body: z.object({
-          email: z.string().email(),
+          email: z.email(),
           password: z.string(),
         }),
         response: {
@@ -29,12 +29,16 @@ export const authenticateWithPassword = (app: FastifyInstance) => {
       const userFromEmail = await findUserByEmail(email);
 
       if (!userFromEmail) {
-        throw new BadRequestError("Invalid credentials.");
+        throw new BadRequestError(
+          "Invalid credentials.",
+          "Email ou senha inválidos."
+        );
       }
 
       if (userFromEmail.passwordHash === null) {
         throw new BadRequestError(
-          "User does not have a password, use social login."
+          "User does not have a password, use social login.",
+          "Esta conta usa login social. Tente fazer login com Google."
         );
       }
 
@@ -44,7 +48,10 @@ export const authenticateWithPassword = (app: FastifyInstance) => {
       );
 
       if (!isPasswordCorrect) {
-        throw new BadRequestError("Invalid credentials.");
+        throw new BadRequestError(
+          "Invalid credentials.",
+          "Email ou senha inválidos."
+        );
       }
 
       const token = await reply.jwtSign(

@@ -1,8 +1,8 @@
 import type { FastifyInstance } from "fastify";
+import { hasZodFastifySchemaValidationErrors } from "fastify-type-provider-zod";
 
 import { BadRequestError } from "@/http/routes/_errors/bad-request-error";
 import { UnauthorizedError } from "@/http/routes/_errors/unauthorized-error";
-import { hasZodFastifySchemaValidationErrors } from "fastify-type-provider-zod";
 
 type FastifyErrorHandler = FastifyInstance["errorHandler"];
 
@@ -19,6 +19,7 @@ export const errorHandler: FastifyErrorHandler = (error, _, reply) => {
     return reply.code(400).send({
       error: "Validation Error",
       message: "Request doesn't match the schema",
+      displayMessage: "Dados inválidos. Verifique as informações.",
       statusCode: 400,
       errors: validationErrors,
     });
@@ -28,6 +29,7 @@ export const errorHandler: FastifyErrorHandler = (error, _, reply) => {
     return reply.status(400).send({
       error: "Bad Request",
       message: error.message,
+      displayMessage: error.displayMessage,
       statusCode: 400,
     });
   }
@@ -36,6 +38,7 @@ export const errorHandler: FastifyErrorHandler = (error, _, reply) => {
     return reply.status(401).send({
       error: "Unauthorized",
       message: error.message,
+      displayMessage: "Acesso negado. Faça login novamente.",
       statusCode: 401,
     });
   }
@@ -43,11 +46,10 @@ export const errorHandler: FastifyErrorHandler = (error, _, reply) => {
   // biome-ignore lint/suspicious/noConsole: Only for debugging
   console.error(error);
 
-  // todo: send error to observability platform (sentry)
-
   return reply.status(500).send({
     error: "Internal Server Error",
     message: "Internal server error",
+    displayMessage: "Erro interno do servidor. Tente novamente.",
     statusCode: 500,
   });
 };

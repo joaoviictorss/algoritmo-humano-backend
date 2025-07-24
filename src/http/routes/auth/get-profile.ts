@@ -35,7 +35,10 @@ export const getProfile = (app: FastifyInstance) => {
         const user = await findUserById(userId);
 
         if (!user) {
-          throw new BadRequestError("User not found.");
+          throw new BadRequestError(
+            "User not found.",
+            "Usuário não encontrado."
+          );
         }
 
         return reply.send({ user });

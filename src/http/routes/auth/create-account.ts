@@ -24,6 +24,7 @@ export const createAccount = (app: FastifyInstance) => {
         response: {
           201: z.object({
             message: z.string(),
+            displayMessage: z.string(),
           }),
         },
       },
@@ -34,7 +35,10 @@ export const createAccount = (app: FastifyInstance) => {
       const userWithSameEmail = await findUserByEmail(email);
 
       if (userWithSameEmail) {
-        throw new BadRequestError("User with same e-mail already exists.");
+        throw new BadRequestError(
+          "User with same e-mail already exists.",
+          "Usuário com este e-mail já existe."
+        );
       }
 
       const passwordHash = await hash(password, 8);
@@ -50,6 +54,7 @@ export const createAccount = (app: FastifyInstance) => {
 
       return reply.status(201).send({
         message: "Account created successfully.",
+        displayMessage: "Conta criada com sucesso.",
       });
     }
   );
