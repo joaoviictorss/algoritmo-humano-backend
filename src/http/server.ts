@@ -21,6 +21,7 @@ import {
   createCourse,
   deleteCourseBySlug,
   getAllCourses,
+  getCourseBySlug,
   getMyCourses,
   updateCourseBySlug,
 } from "@/routes/courses";
@@ -74,6 +75,7 @@ app.register(getProfile);
 // Courses
 app.register(getAllCourses);
 app.register(getMyCourses);
+app.register(getCourseBySlug);
 app.register(createCourse);
 app.register(updateCourseBySlug);
 app.register(deleteCourseBySlug);
