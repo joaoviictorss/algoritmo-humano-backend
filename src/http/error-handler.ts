@@ -38,7 +38,7 @@ export const errorHandler: FastifyErrorHandler = (error, _, reply) => {
     return reply.status(401).send({
       error: "Unauthorized",
       message: error.message,
-      displayMessage: "Acesso negado. Faça login novamente.",
+      displayMessage: "Acesso negado.",
       statusCode: 401,
     });
   }
