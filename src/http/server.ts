@@ -84,4 +84,7 @@ app.get("/health", (_, res) => {
   res.send("OK");
 });
 
-app.listen({ port: env.PORT });
+app.listen({
+  port: env.PORT,
+  host: "0.0.0.0",
+});
